@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../config/config.dart';
 import '../models/christian_modal.dart';
 import '../models/victim_modal.dart';
+import '../widgets/mobile.dart';
 import 'edit_christian.dart';
 import 'navBar.dart';
 
@@ -125,7 +127,7 @@ class _HomePageState extends State<HomePage> {
 class VictimCard extends StatelessWidget {
   final Victim victim;
 
-  const VictimCard({required this.victim});
+  const VictimCard({super.key, required this.victim});
 
   void _showDetailsDialog(BuildContext context) {
     showDialog(
@@ -194,7 +196,7 @@ class VictimCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => HomePage(
+                      builder: (context) => const HomePage(
                           // id: id,
                           // lastName: lastName,
                           // firstName: firstName,
@@ -217,6 +219,87 @@ class ChristianCard extends StatelessWidget {
   final Christian christian;
 
   const ChristianCard({super.key, required this.christian});
+
+  Future<void> _createPDF() async {
+    PdfDocument document = PdfDocument();
+    final page = document.pages.add();
+
+    final font =
+        PdfStandardFont(PdfFontFamily.helvetica, 35, style: PdfFontStyle.bold);
+
+    const titleText = 'Baptism Certificate';
+    String nameText = 'Names: ${christian.lastName} ${christian.firstName}';
+    // String issuedByText = 'Issued by:';
+    final currentDate = DateFormat('MM-dd-yyyy').format(DateTime.now());
+    final dateText = 'Issued on: $currentDate';
+
+    final pageSize = page.getClientSize();
+
+    // Calculate the total height of all text lines
+    final totalTextHeight = font.height * 4; // Four lines of text
+
+    // Calculate the starting Y position for vertical centering
+    final yPos = (pageSize.height - totalTextHeight) / 2;
+
+    page.graphics.drawString(
+      titleText,
+      font,
+      brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+      bounds: Rect.fromLTWH(
+        45,
+        yPos,
+        pageSize.width,
+        pageSize.height,
+      ),
+    );
+
+    final nextYPos = yPos + font.height;
+
+    page.graphics.drawString(
+      nameText,
+      font,
+      brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+      bounds: Rect.fromLTWH(
+        45,
+        nextYPos,
+        pageSize.width,
+        pageSize.height,
+      ),
+    );
+
+    final issuedByYPos = nextYPos + font.height;
+
+    // page.graphics.drawString(
+    //   issuedByText,
+    //   font,
+    //   brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+    //   bounds: Rect.fromLTWH(
+    //     0,
+    //     issuedByYPos,
+    //     pageSize.width,
+    //     pageSize.height,
+    //   ),
+    // );
+
+    final dateYPos = issuedByYPos + font.height;
+
+    page.graphics.drawString(
+      dateText,
+      font,
+      brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+      bounds: Rect.fromLTWH(
+        40,
+        dateYPos,
+        pageSize.width,
+        pageSize.height,
+      ),
+    );
+
+    List<int> bytes = await document.save();
+    document.dispose();
+
+    saveAndLaunchFile(bytes, 'Output.pdf');
+  }
 
   void _showDetailsDialog(BuildContext context) {
     showDialog(
@@ -244,6 +327,10 @@ class ChristianCard extends StatelessWidget {
             ],
           ),
           actions: [
+            ElevatedButton(
+              onPressed: _createPDF,
+              child: const Text('Print Certificate '),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.pop(

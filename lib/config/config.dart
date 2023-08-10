@@ -14,4 +14,5 @@ class Config {
   static const String registerChristianApi = "$appUrl/christian/creation";
   static const String updateChristianApi = "$appUrl/christian";
   static const String fetchChristianApi = "$appUrl/christian";
+  static const String postApi = "$appUrl/post/creation";
 }

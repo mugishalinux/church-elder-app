@@ -68,21 +68,21 @@ class _NavBarState extends State<NavBar> {
               )
             },
           ),
-          // Divider(),
-          // ListTile(
-          //   leading: const Icon(Icons.people_alt),
-          //   title: const Text("Christians"),
-          //   onTap: () => {
-          //     Navigator.pushAndRemoveUntil(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => const PostPage()),
-          //       (Route<dynamic> route) => false,
-          //     )
-          //   },
-          // ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.exit_to_app_outlined),
+            leading: const Icon(Icons.note_alt_outlined),
+            title: const Text("Post"),
+            onTap: () => {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const PostPage()),
+                (Route<dynamic> route) => false,
+              )
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.exit_to_app_outlined),
             title: const Text("Logout"),
             onTap: () async => {await SharedService.logout(context)},
           )

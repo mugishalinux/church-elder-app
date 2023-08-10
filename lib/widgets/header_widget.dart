@@ -31,21 +31,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       child: Stack(
         children: [
           ClipPath(
-            child: Container(
-              decoration: new BoxDecoration(
-                gradient: new LinearGradient(
-                    colors: [
-                      Theme.of(context).primaryColor.withOpacity(0.4),
-                      Theme.of(context).accentColor.withOpacity(0.4),
-                    ],
-                    begin: const FractionalOffset(0.0, 0.0),
-                    end: const FractionalOffset(1.0, 0.0),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp
-                ),
-              ),
-            ),
-            clipper: new ShapeClipper(
+            clipper: ShapeClipper(
                 [
                   Offset(width / 5, _height),
                   Offset(width / 10 * 5, _height - 60),
@@ -53,11 +39,33 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   Offset(width, _height - 18)
                 ]
             ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).primaryColor.withOpacity(0.8),
+                      Theme.of(context).accentColor.withOpacity(0.8),
+                    ],
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(1.0, 0.0),
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp
+                ),
+              ),
+            ),
           ),
           ClipPath(
+            clipper: ShapeClipper(
+                [
+                  Offset(width / 3, _height + 20),
+                  Offset(width / 10 * 8, _height - 60),
+                  Offset(width / 5 * 4, _height - 60),
+                  Offset(width, _height - 20)
+                ]
+            ),
             child: Container(
-              decoration: new BoxDecoration(
-                gradient: new LinearGradient(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
                     colors: [
                       Theme.of(context).primaryColor.withOpacity(0.4),
                       Theme.of(context).accentColor.withOpacity(0.4),
@@ -69,16 +77,16 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 ),
               ),
             ),
-            clipper: new ShapeClipper(
+          ),
+          ClipPath(
+            clipper:  ShapeClipper(
                 [
-                  Offset(width / 3, _height + 20),
-                  Offset(width / 10 * 8, _height - 60),
-                  Offset(width / 5 * 4, _height - 60),
+                  Offset(width / 5, _height),
+                  Offset(width / 2, _height - 40),
+                  Offset(width / 5 * 4, _height - 80),
                   Offset(width, _height - 20)
                 ]
             ),
-          ),
-          ClipPath(
             child: Container(
               decoration: new BoxDecoration(
                 gradient: new LinearGradient(
@@ -92,14 +100,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                     tileMode: TileMode.clamp
                 ),
               ),
-            ),
-            clipper: new ShapeClipper(
-                [
-                  Offset(width / 5, _height),
-                  Offset(width / 2, _height - 40),
-                  Offset(width / 5 * 4, _height - 80),
-                  Offset(width, _height - 20)
-                ]
             ),
           ),
           Visibility(

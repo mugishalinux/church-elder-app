@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:amavunapp/common/theme_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
           width: 50, // Adjust the width to make the loader smaller
           height: 50, // Adjust the height to make the loader smaller
           child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            valueColor: AlwaysStoppedAnimation<Color>(ThemeHelper.primaryColor),
           ),
         ),
       ),

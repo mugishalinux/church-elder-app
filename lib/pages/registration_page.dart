@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import '../common/theme_helper.dart';
 import '../models/church.dart';
 import 'login_page.dart';
 
@@ -108,8 +109,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     );
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor:
-                        Colors.blue, // Set the background color to blue
+                    backgroundColor: ThemeHelper
+                        .primaryColor, // Set the background color to blue
                   ),
                   child: const Text("Close",
                       style: TextStyle(color: Colors.white)),
@@ -140,7 +141,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registration Form')),
+      appBar: AppBar(
+        title: const Text('Registration Form'),
+        backgroundColor: ThemeHelper.primaryColor, // Set the background color
+      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -258,6 +262,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
               const SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: _submitForm,
+                style: ElevatedButton.styleFrom(
+                  primary: ThemeHelper.primaryColor, // Set the background color
+                ),
                 child: _isLoading
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -282,8 +289,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
               Text(
                 "$_errorMessage",
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.red),
               )
             ],
           ),

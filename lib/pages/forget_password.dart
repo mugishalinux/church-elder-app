@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:amavunapp/common/theme_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -58,8 +59,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       );
                     },
                     style: TextButton.styleFrom(
-                      backgroundColor:
-                          Colors.blue, // Set the background color to blue
+                      backgroundColor: ThemeHelper
+                          .primaryColor, // Set the background color to blue
                     ),
                     child: const Text("Close",
                         style: TextStyle(color: Colors.white)),
@@ -87,6 +88,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Reset Password'),
+        backgroundColor: ThemeHelper.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -151,7 +153,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               ),
               ElevatedButton(
                 onPressed: _resetPassword,
-                child: Text('Reset Password'),
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      ThemeHelper.primaryColor, // Set the primary color here
+                ),
+                child: const Text('Reset Password'),
               ),
               if (_responseMessage != null)
                 Center(

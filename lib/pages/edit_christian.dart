@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:amavunapp/common/theme_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ class EditChristianPage extends StatefulWidget {
   final String lastName;
   final String firstName;
   final DateTime dob;
-  final String primaryPhone;
+  final String email;
 
   const EditChristianPage({
     Key? key,
@@ -23,7 +24,7 @@ class EditChristianPage extends StatefulWidget {
     required this.lastName,
     required this.firstName,
     required this.dob,
-    required this.primaryPhone,
+    required this.email,
   }) : super(key: key);
 
   @override
@@ -38,7 +39,9 @@ class _EditChristianPageState extends State<EditChristianPage> {
   String _names = '';
   String _editedFirstName = '';
   String _editedLastName = '';
-  String _editedPhoneNumber = '';
+  String _editedEmail = '';
+  String _isChanged = "yes";
+  DateTime? _tempDate;
   DateTime? _editedDOB;
   final TextEditingController _dobController = TextEditingController();
   final FocusNode _dobFocusNode = FocusNode();
@@ -107,19 +110,20 @@ class _EditChristianPageState extends State<EditChristianPage> {
 
   Future<void> _submitForm() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    TextEditingController dt = TextEditingController();
+    // DateTime dt;
     setState(() {
       _isLoading = true;
     });
 
     final response = await http.put(
-      Uri.parse('${Config.updateChristianApi}/${widget.id}'),
+      Uri.parse('${Config.updateChristianApi}/${widget.id}/${_isChanged}'),
       body: {
         'firstName': _editedFirstName,
         'lastName': _editedLastName,
         // 'dob': _editedDOB?.toString() ?? '',
         'dob': _dobController.text,
-        'phoneNumber': _editedPhoneNumber,
+        'email': _editedEmail,
         'user': prefs.getInt('id').toString(),
       },
       headers: {
@@ -148,7 +152,7 @@ class _EditChristianPageState extends State<EditChristianPage> {
                   );
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: ThemeHelper.primaryColor,
                 ),
                 child:
                     const Text("Close", style: TextStyle(color: Colors.white)),
@@ -181,9 +185,10 @@ class _EditChristianPageState extends State<EditChristianPage> {
     _fetchAndPrintChristian();
     _editedFirstName = widget.firstName;
     _editedLastName = widget.lastName;
-    _editedPhoneNumber = widget.primaryPhone;
+    _editedEmail = widget.email;
     // Set initial value for the DOB field
     _dobController.text = DateFormat('dd MMMM yyyy').format(widget.dob);
+    _tempDate = widget.dob;
   }
 
   @override
@@ -196,7 +201,7 @@ class _EditChristianPageState extends State<EditChristianPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: ThemeHelper.primaryColor,
         title: const Text("Update Christina Info"),
         centerTitle: true,
       ),
@@ -263,13 +268,20 @@ class _EditChristianPageState extends State<EditChristianPage> {
                   );
                   if (picked != null && picked != _selectedDate) {
                     setState(() {
+                      _isChanged = "no";
                       _selectedDate = picked;
                       _dobController.text = DateFormat('yyyy-MM-dd')
                           .format(picked); // Always use 'yyyy-MM-dd' format
                     });
+                    print("date changed");
+                    print(widget.dob);
                   } else {
-                    _dobController.text = DateFormat('yyyy-MM-dd')
-                        .format(widget.dob); // Always use 'yy
+                    print("date not changed");
+                    print(widget.dob);
+                    setState(() {
+                      _dobController.text = DateFormat('yyyy-MM-dd')
+                          .format(widget.dob); // Always use 'yy
+                    });
                   }
                 },
                 validator: (value) {
@@ -286,10 +298,10 @@ class _EditChristianPageState extends State<EditChristianPage> {
                   labelText: 'Phone Number',
                   border: OutlineInputBorder(),
                 ),
-                initialValue: _editedPhoneNumber,
+                initialValue: _editedEmail,
                 onChanged: (value) {
                   setState(() {
-                    _editedPhoneNumber = value;
+                    _editedEmail = value;
                   });
                 },
                 keyboardType: TextInputType.phone,
@@ -297,17 +309,20 @@ class _EditChristianPageState extends State<EditChristianPage> {
                   FilteringTextInputFormatter.digitsOnly,
                 ],
                 validator: (value) {
-                  final pattern = RegExp(r'(07[8,2,3,9])[0-9]{7}');
+                  final pattern =
+                      RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
+                    return 'Please enter your email address';
                   } else if (!pattern.hasMatch(value)) {
-                    return 'Invalid phone number format';
+                    return 'Invalid email address format';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(primary: ThemeHelper.primaryColor),
                 onPressed: _submitForm,
                 child: _isLoading
                     ? Row(
@@ -328,7 +343,7 @@ class _EditChristianPageState extends State<EditChristianPage> {
                           ),
                         ],
                       )
-                    : const Text('Register'),
+                    : const Text('Update'),
               ),
               const SizedBox(
                 height: 10,

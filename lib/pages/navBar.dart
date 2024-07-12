@@ -1,7 +1,9 @@
 import 'package:amavunapp/pages/post_page.dart';
 import 'package:flutter/material.dart';
 
+import '../common/theme_helper.dart';
 import '../service.dart';
+import 'attendence.dart';
 import 'christian_page.dart';
 import 'home_page.dart';
 
@@ -23,7 +25,7 @@ class _NavBarState extends State<NavBar> {
           UserAccountsDrawerHeader(
             accountName: Text(
               widget.names,
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             accountEmail: const Text(""),
             currentAccountPicture: Align(
@@ -40,7 +42,10 @@ class _NavBarState extends State<NavBar> {
                 ),
               ),
             ),
-            decoration: const BoxDecoration(color: Colors.lightBlue),
+            decoration: BoxDecoration(
+              color: ThemeHelper
+                  .primaryColor, // Set the background color from ThemeHelper
+            ),
           ),
           SizedBox(
             height: 10,
@@ -76,6 +81,18 @@ class _NavBarState extends State<NavBar> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const PostPage()),
+                (Route<dynamic> route) => false,
+              )
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.people_alt),
+            title: const Text("Attendence"),
+            onTap: () => {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const AttendencePage()),
                 (Route<dynamic> route) => false,
               )
             },

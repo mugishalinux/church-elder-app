@@ -248,10 +248,12 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
+                              
                               Container(
                                 decoration:
                                     ThemeHelper().buttonBoxDecoration(context),
                                 child: ElevatedButton(
+                                  
                                   style: ThemeHelper().buttonStyle(),
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(
@@ -296,6 +298,8 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 ),
                               ),
+                             
+                             
                               const SizedBox(height: 8.0),
                               Text(
                                 _errorMessage,
@@ -324,7 +328,7 @@ class _LoginPageState extends State<LoginPage> {
                                       },
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).accentColor),
+                                        color: ThemeHelper.primaryColor),
                                   ),
                                 ])),
                               ),

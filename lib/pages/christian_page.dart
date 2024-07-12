@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amavunapp/common/theme_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,9 +23,10 @@ class _ChristianPageState extends State<ChristianPage> {
 
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   DateTime? _selectedDate;
   int? _selectedChurchId;
@@ -69,8 +71,9 @@ class _ChristianPageState extends State<ChristianPage> {
           'firstName': _firstNameController.text,
           'lastName': _lastNameController.text,
           'dob': _dobController.text,
-          'phoneNumber': _phoneNumberController.text,
+          'email': _emailController.text,
           'user': prefs.getInt('id').toString(),
+          'phoneNumber': _phoneController.text
         },
         headers: {
           'Authorization': 'Bearer ${prefs.getString('token')}',
@@ -100,8 +103,8 @@ class _ChristianPageState extends State<ChristianPage> {
                     );
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor:
-                        Colors.blue, // Set the background color to blue
+                    backgroundColor: ThemeHelper
+                        .primaryColor, // Set the background color to blue
                   ),
                   child: const Text("Close",
                       style: TextStyle(color: Colors.white)),
@@ -140,7 +143,8 @@ class _ChristianPageState extends State<ChristianPage> {
     return Scaffold(
       drawer: NavBar(names: _names),
       appBar: AppBar(
-        title: const Text("Register New Christian"),
+        title: const Text("Register new member"),
+        backgroundColor: ThemeHelper.primaryColor,
       ),
       body: Form(
         key: _formKey,
@@ -217,17 +221,31 @@ class _ChristianPageState extends State<ChristianPage> {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
-                controller: _phoneNumberController,
+                controller: _emailController,
                 decoration: const InputDecoration(
-                  labelText: 'Phone Number',
+                  labelText: 'Enter Email',
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
                 validator: (value) {
-                  final pattern = RegExp(r'(07[8,2,3,9])[0-9]{7}');
+                  final pattern =
+                      RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email address';
+                  } else if (!pattern.hasMatch(value)) {
+                    return 'Invalid email address format';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _phoneController,
+                decoration: const InputDecoration(
+                  labelText: 'Enter Phone Number',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  final pattern = RegExp(r'^(07[8239])[0-9]{7}$');
                   if (value == null || value.isEmpty) {
                     return 'Please enter your phone number';
                   } else if (!pattern.hasMatch(value)) {
@@ -236,9 +254,10 @@ class _ChristianPageState extends State<ChristianPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16.0),
-              SizedBox(height: 24.0),
+              const SizedBox(height: 24.0),
               ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(primary: ThemeHelper.primaryColor),
                 onPressed: _submitForm,
                 child: _isLoading
                     ? Row(

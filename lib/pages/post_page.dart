@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amavunapp/common/theme_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -73,8 +74,8 @@ class _PostPageState extends State<PostPage> {
                     );
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor:
-                        Colors.blue, // Set the background color to blue
+                    backgroundColor: ThemeHelper
+                        .primaryColor, // Set the background color to blue
                   ),
                   child: const Text("Close",
                       style: TextStyle(color: Colors.white)),
@@ -114,6 +115,7 @@ class _PostPageState extends State<PostPage> {
       drawer: NavBar(names: _names),
       appBar: AppBar(
         title: const Text("Post"),
+        backgroundColor: ThemeHelper.primaryColor,
         centerTitle: true,
       ),
       body: Form(
@@ -153,6 +155,8 @@ class _PostPageState extends State<PostPage> {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(primary: ThemeHelper.primaryColor),
                 onPressed: _submitForm,
                 child: _isLoading
                     ? Row(

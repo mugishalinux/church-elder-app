@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:amavunapp/common/theme_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../config/config.dart';
 import '../models/christian_modal.dart';
 import '../models/victim_modal.dart';
@@ -56,6 +58,7 @@ class _HomePageState extends State<HomePage> {
         List<Christian> christians = [];
         for (var json in jsonList) {
           christians.add(Christian.fromJson(json));
+          print(Christian.fromJson(json).lastName);
         }
         setState(() {
           _allChristian =
@@ -89,7 +92,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       drawer: NavBar(names: _names),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: ThemeHelper.primaryColor,
         title: const Text("All Christians"),
         centerTitle: true,
       ),
@@ -220,6 +223,15 @@ class ChristianCard extends StatelessWidget {
 
   const ChristianCard({super.key, required this.christian});
 
+  _launchURLBrowser() async {
+    var url = Uri.parse("http://192.168.1.66:3000");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Future<void> _createPDF() async {
     PdfDocument document = PdfDocument();
     final page = document.pages.add();
@@ -322,21 +334,63 @@ class ChristianCard extends StatelessWidget {
               const Divider(),
               Text("DOB: $formattedDOB"), // Display the formatted DOB
               const Divider(),
-              Text("Primary Phone: ${christian.primaryPhone}"),
+              Text("Primary Phone: ${christian.email}"),
               const Divider(),
             ],
           ),
           actions: [
-            ElevatedButton(
-              onPressed: _createPDF,
-              child: const Text('Print Certificate '),
-            ),
+            // ElevatedButton(
+            //   onPressed: _launchURLBrowser,
+            //   style: ButtonStyle(
+            //     padding: MaterialStateProperty.all(const EdgeInsets.all(5.0)),
+            //     textStyle: MaterialStateProperty.all(
+            //       const TextStyle(color: Colors.black),
+            //     ),
+            //   ),
+            //   // textColor: Colors.black,
+            //   // padding: const EdgeInsets.all(5.0),
+            //   child: const Text('Open in Browser'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     const url = 'http://192.168.1.66:3000';
+            //     final Uri uri =
+            //         Uri.parse(url); // Create a Uri object from the URL string
+            //     if (await canLaunchUrl(uri)) {
+            //       // Use the Uri object in canLaunchUrl
+            //       await launchUrl(uri); // Use the Uri object in launchUrl
+            //     } else {
+            //       // Handle error if the URL can't be opened
+            //       // For example, show an error dialog or message
+            //       showDialog(
+            //         context: context,
+            //         builder: (context) => AlertDialog(
+            //           title: Text('Error'),
+            //           content: const Text('Could not launch the URL.'),
+            //           actions: [
+            //             TextButton(
+            //               onPressed: () => Navigator.pop(context),
+            //               child: Text('OK'),
+            //             ),
+            //           ],
+            //         ),
+            //       );
+            //     }
+            //   },
+            //   child: const Text('Print Certificate'),
+            // ),
             TextButton(
+              style:
+                  ElevatedButton.styleFrom(primary: ThemeHelper.primaryColor),
               onPressed: () {
                 Navigator.pop(
                     context); // Close the dialog when 'Close' is pressed
               },
-              child: const Text('Close'),
+              child: const Text(
+                'Close',
+                style: TextStyle(
+                    color: Colors.white), // Set the text color to white
+              ),
             ),
           ],
         );
@@ -369,7 +423,7 @@ class ChristianCard extends StatelessWidget {
                 String lastName = christian.lastName;
                 String firstName = christian.firstName;
                 DateTime dob = christian.dob;
-                String primaryPhone = christian.primaryPhone;
+                String email = christian.email;
 
                 Navigator.push(
                   context,
@@ -379,7 +433,7 @@ class ChristianCard extends StatelessWidget {
                             lastName: lastName,
                             firstName: firstName,
                             dob: dob,
-                            primaryPhone: primaryPhone,
+                            email: email,
                           )),
                 );
               },

@@ -1,5 +1,5 @@
 class Config {
-  static const String appUrl = "http://192.168.1.64:7000";
+  static const String appUrl = "http://10.0.2.2:8000";
   static const String loginApiUser = "$appUrl/user/auth/login/user";
   static const String registerApiUser = "$appUrl/user/createMentor";
   static const String getProvinceApi = "$appUrl/location/province";
@@ -15,4 +15,8 @@ class Config {
   static const String updateChristianApi = "$appUrl/christian";
   static const String fetchChristianApi = "$appUrl/christian";
   static const String postApi = "$appUrl/post/creation";
+  static const String createPresenceAttendence = "$appUrl/attendence/creation";
+  static const String createAbsenceAttendence = "$appUrl/attendence/absence/creation";
+  static const String certificateApi = "$appUrl";
 }
+//0783278625

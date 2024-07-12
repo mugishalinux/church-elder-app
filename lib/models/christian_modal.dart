@@ -3,7 +3,7 @@ class Christian {
   final String lastName;
   final String firstName;
   final DateTime dob;
-  final String primaryPhone;
+  final String email;
   final bool isBaptised;
 
   Christian({
@@ -11,7 +11,7 @@ class Christian {
     required this.lastName,
     required this.firstName,
     required this.dob,
-    required this.primaryPhone,
+    required this.email,
     required this.isBaptised,
   });
 
@@ -21,7 +21,7 @@ class Christian {
       lastName: json['lastName'],
       firstName: json['firstName'],
       dob: DateTime.parse(json['dob']),
-      primaryPhone: json['primaryPhone'],
+      email: json['email'],
       isBaptised: json['isBaptised'],
     );
   }
